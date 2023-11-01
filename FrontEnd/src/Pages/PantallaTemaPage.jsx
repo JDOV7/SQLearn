@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import clienteAxios from "../../config/axios";
 import Swal from "sweetalert2";
 import Nav from "../Components/Nav";
 import OpcionesUsuario from "../Components/OpcionesUsuario";
 import ElementoTemario from "../Components/ElementoTemario";
 
-import introduccionIMG from "../../public/img/bombilla.png";
 import aniadirNuevoTemaIMG from "../../public/img/anadir.png";
 
 function PantallaTema() {
   //   se busca la info relacionada del tema
-  const datos = [
-    { imagen: introduccionIMG, titulo: "¿Que es? " },
-    { imagen: introduccionIMG, titulo: "¿Para que sirve? " },
-    {
-      imagen: introduccionIMG,
-      titulo: "Sintaxis",
-    },
-    {
-      imagen: introduccionIMG,
-      titulo: "Ejemplos",
-    },
-  ];
+  const datos = [];
   const params = useParams();
   const { idTema } = params;
   const [opcionUsuario, opcionUsuarioSet] = useState(1);
   const [valor, setValor] = useState(0);
-  const [subTemas, setSubTemas] = useState(datos);
+  const [subTemas, setSubTemas] = useState([]);
+  const [titulo, setTitulo] = useState("");
+
+  useEffect(() => {
+    const obtSubtemas = async () => {
+      const subtemas = await obtenerSubtemas();
+      setSubTemas(subtemas[1]);
+      setTitulo(subtemas[0]["NombreTema"]);
+      console.log(titulo);
+    };
+    obtSubtemas();
+  }, [subTemas]);
 
   useEffect(() => {
     const cambioDeOpcion = () => {};
@@ -37,30 +37,61 @@ function PantallaTema() {
     opcionUsuarioSet(opcion);
   };
 
+  const obtenerSubtemas = async () => {
+    try {
+      const url = `/temas/tema/${idTema}`;
+      const respuesta = await clienteAxios.get(url);
+      console.log(respuesta?.data?.data?.subtemas);
+      // setDatos(respuesta.data.data.crearTema);
+      return [respuesta?.data?.data?.tema, respuesta?.data?.data?.subtemas];
+    } catch (error) {
+      console.log(error.message);
+      return [];
+    }
+  };
+
+  const crearNuevoSubTema = async (NombreSubTema) => {
+    try {
+      const url = `/sub-temas/subtema`;
+      const respuesta = await clienteAxios.post(url, {
+        NombreSubTema,
+        IdTema: idTema,
+      });
+      console.log(respuesta?.data?.data?.subtema);
+      setDatos([]);
+      return true;
+    } catch (error) {
+      console.log(error.message);
+      return false;
+    }
+  };
+
   return (
     <>
       <Nav></Nav>
       <OpcionesUsuario datos={{ opcionUsuario: 1 }}></OpcionesUsuario>
       <div className="hidden">
-        <h1>{valor}</h1>
+        <h2>{valor}</h2>
       </div>
       <div className="py-4">
-        <h1 className="text-6xl text-center"> {idTema} </h1>
+        <h2 className="text-6xl text-center"> {titulo} </h2>
       </div>
       <div className="p-6">
         <div className="grid grid-cols-6">
-          {subTemas.map((dato, index) => {
-            return (
-              <div className="col-span-1">
-                <ElementoTemario
-                  datos={dato}
-                  iTipoTema={2}
-                  iTipo={2}
-                  key={index}
-                ></ElementoTemario>
-              </div>
-            );
-          })}
+          {subTemas.length >= 1
+            ? subTemas.map((dato, index) => {
+                return (
+                  <div className="col-span-1">
+                    <ElementoTemario
+                      datos={dato}
+                      iTipoTema={2}
+                      iTipo={2}
+                      key={index}
+                    ></ElementoTemario>
+                  </div>
+                );
+              })
+            : ""}
 
           <div className="px-14 ">
             <div
@@ -80,6 +111,14 @@ function PantallaTema() {
                   },
                 });
 
+                const estaCreadoElSubTema = await crearNuevoSubTema(
+                  sNombreTema
+                );
+
+                if (!estaCreadoElSubTema) {
+                  return;
+                }
+
                 if (sNombreTema) {
                   Swal.fire(`Nombre del sub tema: ${sNombreTema}`);
                   const datosLocal = subTemas;
@@ -88,16 +127,16 @@ function PantallaTema() {
                     titulo: sNombreTema,
                     haciaAbajo: true,
                   });
-                  setSubTemas(datosLocal);
+                  setSubTemas([]);
                   setValor(valor + 1);
                 }
               }}
             >
               <img src={aniadirNuevoTemaIMG} alt="" />
             </div>
-            <h1 className="pb-5 text-center text-xl font-bold">
+            <h2 className="pb-5 text-center text-xl font-bold">
               Nuevo Sub Tema
-            </h1>
+            </h2>
           </div>
         </div>
       </div>

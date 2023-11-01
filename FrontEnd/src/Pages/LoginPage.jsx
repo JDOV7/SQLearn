@@ -19,9 +19,9 @@ function LoginPage() {
             {/* <div className="flex justify-center items-center"> */}
             <div className="grid grid-cols-1">
               <div className="col-span-1">
-                <h1 className="text-3xl text-center text-black font-bold px-4">
+                <h2 className="text-3xl text-center text-black font-bold px-4">
                   Ingresar
-                </h1>
+                </h2>
               </div>
               <div className="col-span-1">
                 <form action="" className="  px-44">

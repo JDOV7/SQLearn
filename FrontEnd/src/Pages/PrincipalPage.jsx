@@ -21,7 +21,7 @@ function PrincipalPage() {
       <Nav></Nav>
       <OpcionesUsuario datos={{ opcionUsuario: 1 }}></OpcionesUsuario>
 
-      <AprenderPage></AprenderPage>
+      <AprenderPage key={134534534}></AprenderPage>
     </>
   );
 }

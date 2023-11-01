@@ -9,7 +9,7 @@ function OpcionesUsuario({ datos }) {
   const { opcionUsuario } = datos;
   return (
     <>
-      <div className="grid grid-cols-5 pt-20 text-center font-bold text-2xl">
+      <div className="grid grid-cols-2 pt-20 text-center font-bold text-2xl">
         <Link
           to="/app"
           className={`col-span-1 flex items-center justify-center ${
@@ -27,7 +27,7 @@ function OpcionesUsuario({ datos }) {
             <h2 className="px-3">Aprender</h2>
           </button>
         </Link>
-        <div
+        {/* <div
           className={`col-span-1 flex items-center justify-center ${
             opcionUsuario == 2 ? "bg-secundario rounded-2xl p-2" : ""
           }`}
@@ -39,8 +39,8 @@ function OpcionesUsuario({ datos }) {
             <img src={logrosIMG} alt="" />
             <h2 className="px-3">Logros</h2>
           </button>
-        </div>
-        <div
+        </div> */}
+        {/* <div
           className={`col-span-1 flex items-center justify-center ${
             opcionUsuario == 3 ? "bg-secundario rounded-2xl p-2" : ""
           }`}
@@ -52,8 +52,8 @@ function OpcionesUsuario({ datos }) {
             <img src={desafiosIMG} alt="" />
             <h2 className="px-3">Desafios</h2>
           </button>
-        </div>
-        <div
+        </div> */}
+        {/* <div
           className={`col-span-1 flex items-center justify-center ${
             opcionUsuario == 4 ? "bg-secundario rounded-2xl p-2" : ""
           }`}
@@ -65,7 +65,7 @@ function OpcionesUsuario({ datos }) {
             <img src={tiendaIMG} alt="" />
             <h2 className="px-3">Tienda</h2>
           </button>
-        </div>
+        </div> */}
         <div
           className={`col-span-1 flex items-center justify-center ${
             opcionUsuario == 5 ? "bg-secundario rounded-2xl p-2" : ""

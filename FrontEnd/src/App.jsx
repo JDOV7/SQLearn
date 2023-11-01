@@ -7,6 +7,7 @@ import PrincipalPage from "./Pages/PrincipalPage";
 import PantallaTema from "./Pages/PantallaTemaPage";
 import SubtemaPage from "./Pages/SubtemaPage";
 import TeoriaPage from "./Pages/TeoriaFormPage";
+import TeoriaContenido from "./Pages/TeoriaContenido";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -34,7 +35,14 @@ function App() {
               path="subtema/:idTema"
               element={<SubtemaPage></SubtemaPage>}
             />
-            <Route path="teoria/:idTema" element={<TeoriaPage></TeoriaPage>} />
+            <Route
+              path="teoria/:IdSubTema"
+              element={<TeoriaPage></TeoriaPage>}
+            />
+            <Route
+              path="teoria/contenido/:IdTeoria"
+              element={<TeoriaContenido></TeoriaContenido>}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
