@@ -8,6 +8,8 @@ import PantallaTema from "./Pages/PantallaTemaPage";
 import SubtemaPage from "./Pages/SubtemaPage";
 import TeoriaPage from "./Pages/TeoriaFormPage";
 import TeoriaContenido from "./Pages/TeoriaContenido";
+import JuegosPage from "./Pages/JuegosPage";
+import AhorcadoForm from "./Pages/AhorcadoForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -42,6 +44,14 @@ function App() {
             <Route
               path="teoria/contenido/:IdTeoria"
               element={<TeoriaContenido></TeoriaContenido>}
+            />
+            <Route
+              path="juegos/:IdSubTema"
+              element={<JuegosPage></JuegosPage>}
+            />
+            <Route
+              path="juegos/ahorcado/:IdSubTema/:IdJuego"
+              element={<AhorcadoForm></AhorcadoForm>}
             />
           </Route>
         </Routes>

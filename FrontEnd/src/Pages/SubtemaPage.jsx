@@ -7,6 +7,7 @@ import OpcionesUsuario from "../Components/OpcionesUsuario";
 import ElementoTemario from "../Components/ElementoTemario";
 
 import aniadirNuevoTemaIMG from "../../public/img/anadir.png";
+import juegosIMG from "../../public/img/rompecabezas.png";
 
 function Subtema() {
   const params = useParams();
@@ -14,6 +15,7 @@ function Subtema() {
   const [opcionUsuario, opcionUsuarioSet] = useState(1);
   const [valor, setValor] = useState(0);
   const [teorias, setTeorias] = useState([]);
+  const [juegos, setjuegos] = useState([]);
   const [titulo, setTitulo] = useState("");
 
   useEffect(() => {
@@ -26,6 +28,15 @@ function Subtema() {
     obtTeorias();
   }, [teorias]);
 
+  useEffect(() => {
+    const obtJuegos = async () => {
+      const juegos = await obtenerJuegos();
+      setjuegos(juegos[0]);
+      console.log(juegos);
+    };
+    obtJuegos();
+  }, [juegos]);
+
   const obtenerTeorias = async () => {
     try {
       const url = `/sub-temas/subtema/${idTema}`;
@@ -34,6 +45,17 @@ function Subtema() {
       // console.log(respuesta?.data?.data?.subtemas);
       // setDatos(respuesta.data.data.crearTema);
       return [respuesta?.data?.data?.subtema, respuesta?.data?.data?.teorias];
+    } catch (error) {
+      console.log(error.message);
+      return [];
+    }
+  };
+
+  const obtenerJuegos = async () => {
+    try {
+      const url = `/juego/juegos/creados/${idTema}`;
+      const respuesta = await clienteAxios.get(url);
+      return [respuesta?.data?.data?.ahorcados];
     } catch (error) {
       console.log(error.message);
       return [];
@@ -90,18 +112,27 @@ function Subtema() {
       </div>
       <div className="p-6">
         <div className="grid grid-cols-6">
-          {/* {datos.map((dato, index) => {
-            return (
-              <div className="col-span-1">
-                <ElementoTemario
-                  datos={dato}
-                  iTipoTema={3}
-                  iTipo={3}
-                  key={index}
-                ></ElementoTemario>
-              </div>
-            );
-          })} */}
+          {juegos.length >= 1
+            ? juegos.map((dato, index) => {
+                return (
+                  <div className="col-span-1">
+                    <ElementoTemario
+                      datos={dato}
+                      iTipoTema={5}
+                      iTipo={5}
+                      key={index}
+                    ></ElementoTemario>
+                  </div>
+                );
+              })
+            : ""}
+
+          <Link className="px-14 " to={`/app/juegos/${idTema}`}>
+            <div className="rounded-full bg-terciario py-4 flex items-center justify-center hover:cursor-pointer">
+              <img src={juegosIMG} alt="" />
+            </div>
+            <h2 className="pb-5 text-center text-xl font-bold">Nuevo Juego</h2>
+          </Link>
         </div>
       </div>
     </>

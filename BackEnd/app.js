@@ -9,6 +9,8 @@ import { fileURLToPath } from "url";
 import TemaRouter from "./routes/TemaRouter.js";
 import SubTemaRouter from "./routes/SubTemaRouter.js";
 import TeoriaRouter from "./routes/TeoriaRouter.js";
+import JuegoRouter from "./routes/JuegoRouter.js";
+import AhorcadoRouter from "./routes/AhorcadoRouter.js";
 
 // import routerUsuario from "./Usuarios/index.js";
 // import routerAuth from "./Auth/AuthRouter.js";
@@ -62,6 +64,8 @@ app.use(cors(corsOptions));
 app.use("/temas", TemaRouter);
 app.use("/sub-temas", SubTemaRouter);
 app.use("/teoria", TeoriaRouter);
+app.use("/juego", JuegoRouter);
+app.use("/ahorcado", AhorcadoRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

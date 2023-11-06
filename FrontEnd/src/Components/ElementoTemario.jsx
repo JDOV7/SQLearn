@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import EstructuraDeUnaBDIMG from "../../public/img/organizado.png";
 import introduccionIMG from "../../public/img/bombilla.png";
 import teoriaIMG from "../../public/img/bombilla.png";
+import videojuegoIMG from "../../public/img/videojuego.png";
 function ElementoTemario({ datos, iTipoTema, iTipo }) {
   const { titulo, url } = datos;
   // console.log(esTema);
@@ -27,6 +28,10 @@ function ElementoTemario({ datos, iTipoTema, iTipo }) {
     case 4:
       sColorFondo = "bg-cuarto";
       break;
+    case 5:
+      sColorFondo = "bg-terciario";
+      imagen = videojuegoIMG;
+      break;
     default:
       break;
   }
@@ -41,6 +46,9 @@ function ElementoTemario({ datos, iTipoTema, iTipo }) {
     case 3:
       sURL = `/app/teoria/contenido/${url}`;
       break;
+    case 5:
+      sURL = `/app/teoria/contenido/${url}`;
+      break;
     default:
       break;
   }
@@ -53,9 +61,9 @@ function ElementoTemario({ datos, iTipoTema, iTipo }) {
   return (
     <>
       <div>
-        <div className="px-14">
-          <div className=" rounded-full bg-red flex items-center justify-center hover:cursor-pointer">
-            <h2 className="font-extrabold text-black">Eliminar</h2>
+        <div className="px-14 ">
+          <div className="shadow-2xl rounded-full bg-red flex items-center justify-center hover:cursor-pointer">
+            <h2 className="shadow-2xl font-extrabold text-black">Eliminar</h2>
           </div>
           <Link
             to={sURL}
@@ -63,7 +71,7 @@ function ElementoTemario({ datos, iTipoTema, iTipo }) {
           >
             <img src={imagen} alt="" />
           </Link>
-          <div className=" rounded-full bg-green flex items-center justify-center hover:cursor-pointer">
+          <div className="shadow-2xl rounded-full bg-green flex items-center justify-center hover:cursor-pointer">
             <h2 className="font-extrabold text-black">Editar</h2>
           </div>
           <h2 className="pt-5 text-center text-xl font-bold">{titulo}</h2>
