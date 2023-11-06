@@ -48,4 +48,31 @@ const obtenerTeoria = async (req, res) => {
   }
 };
 
-export { crearNuevaTeoria, obtenerTeoria };
+const eliminarTeoria = async (req, res) => {
+  try {
+    const { IdTeoria } = req.params;
+    const teoria = await Teoria.destroy({
+      where: {
+        IdTeoria,
+      },
+    });
+
+    if (!teoria) {
+      throw new Error("Error");
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Teoria eliminada correctamente",
+      data: { teoria },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: "Error al eliminar la teoria",
+      data: {},
+    });
+  }
+};
+
+export { crearNuevaTeoria, obtenerTeoria, eliminarTeoria };

@@ -40,13 +40,17 @@ function AprenderPage() {
     try {
       const url = `/temas/tema`;
       const respuesta = await clienteAxios.post(url, { NombreTema });
-      console.log(respuesta?.data?.data?.crearTema);
+      // console.log(respuesta?.data?.data?.crearTema);
       setDatos(respuesta.data.data.crearTema);
       return true;
     } catch (error) {
       console.log(error.message);
       return false;
     }
+  };
+
+  const eliminarSubtema = async (dato) => {
+    console.log(dato);
   };
 
   return (
@@ -68,6 +72,9 @@ function AprenderPage() {
                       iTipoTema={1}
                       iTipo={1}
                       key={dato.IdTema}
+                      funcionalidad={() => {
+                        eliminarSubtema(dato);
+                      }}
                     ></ElementoTemario>
                   </div>
                 );

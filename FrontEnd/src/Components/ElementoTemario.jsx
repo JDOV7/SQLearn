@@ -5,7 +5,7 @@ import EstructuraDeUnaBDIMG from "../../public/img/organizado.png";
 import introduccionIMG from "../../public/img/bombilla.png";
 import teoriaIMG from "../../public/img/bombilla.png";
 import videojuegoIMG from "../../public/img/videojuego.png";
-function ElementoTemario({ datos, iTipoTema, iTipo }) {
+function ElementoTemario({ datos, iTipoTema, iTipo, funcionalidad }) {
   const { titulo, url } = datos;
   // console.log(esTema);
   // const [click, setClick] = useState(false);
@@ -62,7 +62,12 @@ function ElementoTemario({ datos, iTipoTema, iTipo }) {
     <>
       <div>
         <div className="px-14 ">
-          <div className="shadow-2xl rounded-full bg-red flex items-center justify-center hover:cursor-pointer">
+          <div
+            className="shadow-2xl rounded-full bg-red flex items-center justify-center hover:cursor-pointer"
+            onClick={() => {
+              funcionalidad();
+            }}
+          >
             <h2 className="shadow-2xl font-extrabold text-black">Eliminar</h2>
           </div>
           <Link

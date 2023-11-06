@@ -3,6 +3,7 @@ import {
   agregarNuevoSubTema,
   obtenerSubtemas,
   obtenerSubTema,
+  eliminarSubtema,
 } from "../controllers/SubTemaController.js";
 import validarCrearSubtema from "../validaciones/middleware/validarCrearSubtema.js";
 
@@ -13,5 +14,7 @@ SubTemaRouter.post("/subtema", validarCrearSubtema, agregarNuevoSubTema);
 SubTemaRouter.get("/subtemas", obtenerSubtemas);
 
 SubTemaRouter.get("/subtema/:IdSubTema", obtenerSubTema);
+
+SubTemaRouter.delete("/subtema/:IdSubTema", eliminarSubtema);
 
 export default SubTemaRouter;

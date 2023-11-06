@@ -23,7 +23,7 @@ function PantallaTema() {
       const subtemas = await obtenerSubtemas();
       setSubTemas(subtemas[1]);
       setTitulo(subtemas[0]["NombreTema"]);
-      console.log(titulo);
+      // console.log(titulo);
     };
     obtSubtemas();
   }, [subTemas]);
@@ -41,7 +41,7 @@ function PantallaTema() {
     try {
       const url = `/temas/tema/${idTema}`;
       const respuesta = await clienteAxios.get(url);
-      console.log(respuesta?.data?.data?.subtemas);
+      // console.log(respuesta?.data?.data?.subtemas);
       // setDatos(respuesta.data.data.crearTema);
       return [respuesta?.data?.data?.tema, respuesta?.data?.data?.subtemas];
     } catch (error) {
@@ -57,12 +57,29 @@ function PantallaTema() {
         NombreSubTema,
         IdTema: idTema,
       });
-      console.log(respuesta?.data?.data?.subtema);
+      // console.log(respuesta?.data?.data?.subtema);
       setDatos([]);
       return true;
     } catch (error) {
       console.log(error.message);
       return false;
+    }
+  };
+
+  const eliminarSubtema = async (dato) => {
+    try {
+      const url = `/sub-temas/subtema/${dato.url}`;
+      const respuesta = await clienteAxios.delete(url);
+      console.log(respuesta?.data?.data);
+      Swal.fire("Subtema Eliminado Correctamente");
+
+      // return [respuesta?.data?.data?.ahorcados];
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo salio mal al intentar borrar el subtema",
+      });
     }
   };
 
@@ -86,7 +103,10 @@ function PantallaTema() {
                       datos={dato}
                       iTipoTema={2}
                       iTipo={2}
-                      key={index}
+                      key={new Date() + index}
+                      funcionalidad={() => {
+                        eliminarSubtema(dato);
+                      }}
                     ></ElementoTemario>
                   </div>
                 );

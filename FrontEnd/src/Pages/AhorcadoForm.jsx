@@ -126,12 +126,12 @@ function AhorcadoForm() {
             ))}
 
             {/* Mostrar el contenido de los inputs no borrados */}
-            <div>
+            {/* <div>
               <h2>Contenido de Inputs No Borrados</h2>
               {Object.entries(contenidos).map(([id, contenido]) => (
                 <p key={id}>{`Input ${id}: ${JSON.stringify(contenido)}`}</p>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
 

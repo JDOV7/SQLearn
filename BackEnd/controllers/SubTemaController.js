@@ -1,4 +1,4 @@
-import { SubTema, Teoria } from "../models/index.js";
+import { SubTema, Teoria, Ahorcado } from "../models/index.js";
 
 const agregarNuevoSubTema = async (req, res) => {
   const { NombreSubTema, IdTema } = req.body;
@@ -79,4 +79,66 @@ const obtenerSubTema = async (req, res) => {
   }
 };
 
-export { agregarNuevoSubTema, obtenerSubtemas, obtenerSubTema };
+const eliminarSubtema = async (req, res) => {
+  try {
+    const { IdSubTema } = req.params;
+
+    const teorias = await Teoria.findAll({
+      where: {
+        IdSubTema,
+      },
+    });
+
+    teorias.forEach(async (teoria) => {
+      console.log(teoria.dataValues.IdTeoria);
+      const { IdTeoria } = teoria.dataValues;
+      const teoria_ = await Teoria.destroy({
+        where: {
+          IdTeoria,
+        },
+      });
+    });
+
+    const ahorcados = await Ahorcado.findAll({
+      where: {
+        IdSubTema,
+      },
+    });
+
+    ahorcados.forEach(async (ahorcado) => {
+      console.log(ahorcado.dataValues.IdAhorcado);
+      const { IdAhorcado } = ahorcado.dataValues;
+      const ahorcado_ = await Ahorcado.destroy({
+        where: {
+          IdAhorcado,
+        },
+      });
+    });
+
+    const subtema = await SubTema.destroy({
+      where: {
+        IdSubTema,
+      },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Subtema eliminado correctamente",
+      data: { IdSubTema },
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(400).json({
+      status: 400,
+      message: "Error al eliminar el subtema",
+      data: {},
+    });
+  }
+};
+
+export {
+  agregarNuevoSubTema,
+  obtenerSubtemas,
+  obtenerSubTema,
+  eliminarSubtema,
+};

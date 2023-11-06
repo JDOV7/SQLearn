@@ -26,10 +26,10 @@ function JuegoCard({ datos }) {
         <div className="flex items-center justify-center py-2">
           <img src={img} alt="" />
         </div>
-        <div>
+        {/* <div>
           <h1 className="text-base">{IdJuego}</h1>
           <h1 className="text-base"> {IdSubTema}</h1>
-        </div>
+        </div> */}
         <div className="p-6">
           <Link
             to={generarURL()}

@@ -32,7 +32,6 @@ function Subtema() {
     const obtJuegos = async () => {
       const juegos = await obtenerJuegos();
       setjuegos(juegos[0]);
-      console.log(juegos);
     };
     obtJuegos();
   }, [juegos]);
@@ -71,6 +70,23 @@ function Subtema() {
     opcionUsuarioSet(opcion);
   };
 
+  const eliminarTeoria = async (dato) => {
+    try {
+      const url = `/teoria/teoria/${dato.url}`;
+      const respuesta = await clienteAxios.delete(url);
+      console.log(respuesta?.data?.data);
+      Swal.fire("Teoria Eliminada Correctamente");
+
+      // return [respuesta?.data?.data?.ahorcados];
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo salio mal al intentar borrar esta teoria",
+      });
+    }
+  };
+
   return (
     <>
       <Nav></Nav>
@@ -92,6 +108,9 @@ function Subtema() {
                       iTipoTema={3}
                       iTipo={3}
                       key={index}
+                      funcionalidad={() => {
+                        eliminarTeoria(dato);
+                      }}
                     ></ElementoTemario>
                   </div>
                 );

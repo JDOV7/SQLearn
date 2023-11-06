@@ -31,4 +31,31 @@ const crearAhorcado = async (req, res) => {
   }
 };
 
-export { crearAhorcado };
+const eliminarAhorcado = async (req, res) => {
+  try {
+    const { IdAhorcado } = req.params;
+    const ahorcado = await Ahorcado.destroy({
+      where: {
+        IdAhorcado,
+      },
+    });
+
+    if (!ahorcado) {
+      throw new Error("Error");
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Ahorcado eliminado correctamente",
+      data: { ahorcado },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: "Error al eliminar el ahorcado",
+      data: {},
+    });
+  }
+};
+
+export { crearAhorcado, eliminarAhorcado };
