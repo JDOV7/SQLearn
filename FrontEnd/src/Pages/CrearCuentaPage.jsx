@@ -1,10 +1,77 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import clienteAxios from "../../config/axios";
 import Nav from "../Components/Nav";
 import sqlIMG from "../../public/img/servidor-sql.png";
 import facebookIMG from "../../public/img/facebook.png";
+import mensajeError from "../Helpers/MensajeError";
 
 function CrearCuenta() {
+  const navigate = useNavigate();
+  const [NombreJugador, setNombre] = useState("");
+  const [Correo, setCorreo] = useState("");
+  const [Password, setPassword] = useState("");
+  const [passwordRepetir, setPasswordRepetir] = useState("");
+
+  const crearCuenta = async (e) => {
+    e.preventDefault();
+    try {
+      const regexNombreJugador = /^[a-zA-Z\s]+$/;
+      const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      if (NombreJugador.length < 3 || !regexNombreJugador.test(NombreJugador)) {
+        mensajeError("Error en el formulario", "Nombre no valido");
+        return;
+      }
+
+      if (
+        Correo.length < 15 ||
+        !regexCorreo.test(Correo) ||
+        !Correo.includes("@")
+      ) {
+        mensajeError("Error en el formulario", "El correo no es valido");
+        return;
+      }
+
+      if (Password.length < 8) {
+        mensajeError("Error en el formulario", "La contraseña es muy corta");
+        return;
+      }
+
+      const infoUsuario = { NombreJugador, Correo, Password };
+
+      if (Password.toString() !== passwordRepetir.toString()) {
+        Swal.fire({
+          icon: "error",
+          title: "Error en el formulario",
+          text: "Las contraseñas no coinciden",
+        });
+        return;
+      }
+
+      const url = "/jugadores/jugador";
+      const { data } = await clienteAxios.post(url, infoUsuario);
+      console.log(Password.toString() === passwordRepetir.toString());
+      console.log(infoUsuario);
+      console.log(data);
+      Swal.fire({
+        title: "¡Cuenta Creada!",
+        text: `La cuenta se creo de forma exitosa`,
+        icon: "success",
+      }).then(() => {
+        navigate("/login");
+      });
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "¡No se pudo crear tu cuenta!",
+        text: `Ocurrio un error al crear la cuenta`,
+        icon: "error",
+      });
+    }
+  };
+
   return (
     <>
       <Nav></Nav>
@@ -31,6 +98,10 @@ function CrearCuenta() {
                     <div className="col-span-1 pt-8">
                       <input
                         type="text"
+                        value={NombreJugador}
+                        onChange={(e) => {
+                          setNombre(e.target.value);
+                        }}
                         className="bg-cuarto text-xl  w-full p-3  rounded-2xl font-bold"
                         placeholder="Nombre Completo"
                       />
@@ -40,6 +111,10 @@ function CrearCuenta() {
                         type="text"
                         className="bg-cuarto text-xl  w-full p-3  rounded-2xl font-bold"
                         placeholder="Correo"
+                        value={Correo}
+                        onChange={(e) => {
+                          setCorreo(e.target.value);
+                        }}
                       />
                     </div>
                     <div className="col-span-1 pt-8">
@@ -47,10 +122,30 @@ function CrearCuenta() {
                         type="password"
                         className="bg-cuarto text-xl  w-full p-3 rounded-2xl font-bold"
                         placeholder="Password"
+                        value={Password}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div className="col-span-1 pt-8">
+                      <input
+                        type="password"
+                        className="bg-cuarto text-xl  w-full p-3 rounded-2xl font-bold"
+                        placeholder="Repetir Password"
+                        value={passwordRepetir}
+                        onChange={(e) => {
+                          setPasswordRepetir(e.target.value);
+                        }}
                       />
                     </div>
                     <div className="pt-8 text-center">
-                      <button className="bg-principal uppercase text-center py-4 text-white rounded-2xl font-bold hover:bg-terciario px-8">
+                      <button
+                        className="bg-principal uppercase text-center py-4 text-white rounded-2xl font-bold hover:bg-terciario px-8"
+                        onClick={(e) => {
+                          crearCuenta(e);
+                        }}
+                      >
                         Crear Cuenta
                       </button>
                     </div>

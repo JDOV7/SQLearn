@@ -4,9 +4,52 @@ import logrosIMG from "../../public/img/insignia.png";
 import desafiosIMG from "../../public/img/exito.png";
 import tiendaIMG from "../../public/img/tienda.png";
 import perfilIMG from "../../public/img/perfil.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import mensajeError from "../Helpers/MensajeError";
+import clienteAxios from "../../config/axios";
+import Swal from "sweetalert2";
 function OpcionesUsuario({ datos }) {
-  const { opcionUsuario } = datos;
+  const navigate = useNavigate();
+
+  const { opcionUsuario, tipoUsuario } = datos;
+
+  const agregarNuevoTemaAlUsuario = async () => {
+    try {
+      // const { value: sCodigoTema } =
+      await Swal.fire({
+        title: "Agregar Tema",
+        input: "text",
+        inputLabel: "Codigo del Tema",
+      }).then(async (e) => {
+        if (e.isConfirmed) {
+          // Swal.fire({ title: e.value });
+          const token = window.localStorage.getItem("jwt_SQLearn_token");
+          const url = `/temas/tema/jugador`;
+          const { data } = await clienteAxios.post(
+            url,
+            { Codigo: e.value },
+            { headers: { Authorization: token } }
+          );
+          // navigate("/app");
+        }
+      });
+
+      Swal.fire({
+        title: "Agregado Correctamente",
+        icon: "success",
+        text: "Tema nuevo, ahora puedes estudiarlo",
+      }).then(() => {
+        window.location.href = "/app";
+      });
+    } catch (error) {
+      console.log(error);
+      mensajeError(
+        "Error al agregar tema",
+        "No se pudo agregar el tema en este momento"
+      );
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 pt-20 text-center font-bold text-2xl">
@@ -73,10 +116,53 @@ function OpcionesUsuario({ datos }) {
         >
           <button
             className="flex items-center justify-center"
-            onClick={() => handlerEscogerOpcion(5)}
+            // onClick={() => handlerEscogerOpcion(5)}
           >
             <img src={perfilIMG} alt="" />
-            <h2 className="px-3">Perfil</h2>
+            <h2 className="px-3">Opciones</h2>
+            <div className="px-3">
+              <select
+                className="px-3 text-lg"
+                onChange={async (e) => {
+                  // e.preventDefault();
+
+                  if (e.target.value == "agregar-tema") {
+                    await agregarNuevoTemaAlUsuario();
+                  } else if (e.target.value == "cerrar-sesion") {
+                    window.localStorage.clear();
+                    navigate("/login");
+                  } else if (e.target.value == "crear-docente") {
+                    // Swal.fire("Nuevo Docente");
+                    navigate("/app/docente");
+                  }
+                }}
+              >
+                <option value="bucharest" selected>
+                  --Escoge--
+                </option>
+                {tipoUsuario == "alumno" ? (
+                  <>
+                    <option key={1} value="agregar-tema">
+                      Agregar Tema
+                    </option>
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {tipoUsuario == "docente" ? (
+                  <>
+                    <option key={2} value="crear-docente">
+                      Nuevo Docente
+                    </option>
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                <option value="cerrar-sesion">Cerrar Sesion</option>
+              </select>
+            </div>
           </button>
         </div>
       </div>

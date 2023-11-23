@@ -9,6 +9,7 @@ import Nav from "../Components/Nav";
 import OpcionesUsuario from "../Components/OpcionesUsuario";
 function TeoriaContenido() {
   const params = useParams();
+  const navigate = useNavigate();
   const { IdTeoria } = params;
   const [NombreTeoria, setNombreTeoria] = useState("");
   const [contenido, setcontenido] = useState("");
@@ -27,12 +28,21 @@ function TeoriaContenido() {
   const obtenerTeorias = async () => {
     try {
       const url = `/teoria/teoria/${IdTeoria}`;
-      const respuesta = await clienteAxios.get(url);
+      const token = window.localStorage.getItem("jwt_SQLearn_token");
+      const respuesta = await clienteAxios.get(url, {
+        headers: { Authorization: token },
+      });
       // console.log(respuesta);
       // console.log(respuesta?.data?.data?.subtemas);
       // setDatos(respuesta.data.data.crearTema);
       return respuesta?.data?.data?.teoria;
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Necesitas iniciar sesion",
+        text: "Inicia sesion",
+      });
+      navigate("/login");
       console.log(error.message);
       return {};
     }

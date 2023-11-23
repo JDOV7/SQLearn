@@ -1,15 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import clienteAxios from "../../config/axios";
 import Nav from "../Components/Nav";
 import OpcionesUsuario from "../Components/OpcionesUsuario";
 import JuegoCard from "../Components/JuegoCard";
 import soga from "../../public/img/soga.png";
+import mensajeError from "../Helpers/MensajeError";
 
 function JuegosPage() {
+  const navigate = useNavigate();
   const [juegos, setJuegos] = useState([]);
   const params = useParams();
   const { IdSubTema } = params;
+
+  const [tipoUsuario, setTipoUsuario] = useState("");
+
+  useEffect(() => {
+    const iniciarSesion = async () => {
+      await verificarSesion();
+    };
+    iniciarSesion();
+  }, []);
+
+  const verificarSesion = async () => {
+    try {
+      const url = "jugadores/validar-sesion";
+      const token = window.localStorage.getItem("jwt_SQLearn_token");
+      const { data } = await clienteAxios.post(
+        url,
+        {},
+        { headers: { Authorization: token } }
+      );
+      console.log(data.data.tipo);
+      setTipoUsuario(data.data.tipo);
+    } catch (error) {
+      mensajeError("Inicia sesion", "Necesitas iniciar sesion primero");
+      navigate("/login");
+    }
+  };
+
   useEffect(() => {
     const obtJuegos = async () => {
       const juegosRes = await obtenerJuegos();
@@ -36,7 +65,9 @@ function JuegosPage() {
   return (
     <>
       <Nav></Nav>
-      <OpcionesUsuario datos={{ opcionUsuario: 1 }}></OpcionesUsuario>
+      <OpcionesUsuario
+        datos={{ opcionUsuario: 1, tipoUsuario }}
+      ></OpcionesUsuario>
       <div className="py-4">
         <h1 className="text-center text-6xl">Escoge un Juego</h1>
       </div>

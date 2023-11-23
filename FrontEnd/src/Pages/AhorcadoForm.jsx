@@ -1,13 +1,48 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import clienteAxios from "../../config/axios";
 import Nav from "../Components/Nav";
 import OpcionesUsuario from "../Components/OpcionesUsuario";
 import ahorcado from "../../public/img/ahorcado.webp";
+import mensajeError from "../Helpers/MensajeError";
 
 function AhorcadoForm() {
   //   useEffect(() => {}, [palabras]);
+  const params = useParams();
+  const navigate = useNavigate();
+  const { IdSubTema, IdJuego } = params;
 
+  const [titulo, setTitulo] = useState("");
+  const [descripcion, setDescripcion] = useState("");
   const [inputs, setInputs] = useState([]);
   const [contenidos, setContenidos] = useState({});
+
+  const [tipoUsuario, setTipoUsuario] = useState("");
+
+  useEffect(() => {
+    const iniciarSesion = async () => {
+      await verificarSesion();
+    };
+    iniciarSesion();
+  }, []);
+
+  const verificarSesion = async () => {
+    try {
+      const url = "jugadores/validar-sesion";
+      const token = window.localStorage.getItem("jwt_SQLearn_token");
+      const { data } = await clienteAxios.post(
+        url,
+        {},
+        { headers: { Authorization: token } }
+      );
+      console.log(data.data.tipo);
+      setTipoUsuario(data.data.tipo);
+    } catch (error) {
+      mensajeError("Inicia sesion", "Necesitas iniciar sesion primero");
+      navigate("/login");
+    }
+  };
 
   // Función para agregar un nuevo input
   const agregarInput = () => {
@@ -37,10 +72,46 @@ function AhorcadoForm() {
     setContenidos({ ...contenidos, [id]: valor });
   };
 
+  const crearAhorcado = async () => {
+    // window.alert("creando.........");
+    let palabras = "",
+      reglas = "";
+    // contenidos;
+    Object.keys(contenidos).forEach((id) => {
+      palabras += `${contenidos[id].palabra}*|*`;
+      reglas += `${contenidos[id].regla}*|*`;
+    });
+
+    // Swal.fire(
+    //   `${IdSubTema}\n->${IdJuego}\n->${titulo}\n->${descripcion}\n->${palabras}\n->${reglas}`
+    // );
+
+    try {
+      const url = `/ahorcado/ahorcado`;
+      const respuesta = await clienteAxios.post(url, {
+        IdSubTema,
+        IdJuego,
+        titulo,
+        descripcion,
+        palabras,
+        reglas,
+      });
+      console.log(respuesta?.data?.data);
+      Swal.fire("Guardado Correctamente");
+      navigate(`/app/subtema/${IdSubTema}`);
+      return true;
+    } catch (error) {
+      console.log(error.message);
+      return false;
+    }
+  };
+
   return (
     <>
       <Nav></Nav>
-      <OpcionesUsuario datos={{ opcionUsuario: 1 }}></OpcionesUsuario>
+      <OpcionesUsuario
+        datos={{ opcionUsuario: 1, tipoUsuario }}
+      ></OpcionesUsuario>
       <div className="py-4">
         <h1 className="text-center text-6xl">
           Llena los datos para el Ahorcado
@@ -55,6 +126,10 @@ function AhorcadoForm() {
           <input
             type="text"
             className="bg-cuarto rounded-lg w-full font-bold p-4"
+            value={titulo}
+            onChange={(e) => {
+              setTitulo(e.target.value);
+            }}
           />
         </div>
       </div>
@@ -64,7 +139,13 @@ function AhorcadoForm() {
           <h1 className=" text-justify text-xl font-bold p-5">Descripcion</h1>
         </div>
         <div className="grid col-span-2">
-          <textarea className="bg-cuarto rounded-lg w-full font-bold p-4"></textarea>
+          <textarea
+            className="bg-cuarto rounded-lg w-full font-bold p-4"
+            value={descripcion}
+            onChange={(e) => {
+              setDescripcion(e.target.value);
+            }}
+          ></textarea>
         </div>
       </div>
 
@@ -146,6 +227,10 @@ function AhorcadoForm() {
         <button
           // onClick={agregarInput}
           className="rounded-full bg-principal text-white font-extrabold py-3 flex items-center justify-center hover:cursor-pointer px-4"
+          onClick={(e) => {
+            e.preventDefault();
+            crearAhorcado();
+          }}
         >
           Guardar Juego
         </button>

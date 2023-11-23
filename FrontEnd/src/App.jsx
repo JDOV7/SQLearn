@@ -10,6 +10,11 @@ import TeoriaPage from "./Pages/TeoriaFormPage";
 import TeoriaContenido from "./Pages/TeoriaContenido";
 import JuegosPage from "./Pages/JuegosPage";
 import AhorcadoForm from "./Pages/AhorcadoForm";
+import EjecutandoJuego from "./Pages/EjecutandoJuego";
+import AhorcadoDocentePage from "./Pages/AhorcadoDocentePage";
+import EditarTeoria from "./Pages/EditarTeoria";
+import CrearCuentaDocente from "./Pages/CrearCuentaDocente";
+import EditarAhorcadoPage from "./Pages/EditarAhorcadoPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -42,6 +47,10 @@ function App() {
               element={<TeoriaPage></TeoriaPage>}
             />
             <Route
+              path="teoria/editar/:IdTeoria"
+              element={<EditarTeoria></EditarTeoria>}
+            />
+            <Route
               path="teoria/contenido/:IdTeoria"
               element={<TeoriaContenido></TeoriaContenido>}
             />
@@ -52,6 +61,22 @@ function App() {
             <Route
               path="juegos/ahorcado/:IdSubTema/:IdJuego"
               element={<AhorcadoForm></AhorcadoForm>}
+            />
+            <Route
+              path="juegos/ahorcado/ejecutando/:IdAhorcado"
+              element={<EjecutandoJuego></EjecutandoJuego>}
+            />
+            <Route
+              path="juegos/ahorcado/docente/:IdAhorcado"
+              element={<AhorcadoDocentePage></AhorcadoDocentePage>}
+            />{" "}
+            <Route
+              path="juegos/ahorcado/docente/editar/:IdAhorcado"
+              element={<EditarAhorcadoPage></EditarAhorcadoPage>}
+            />
+            <Route
+              path="docente"
+              element={<CrearCuentaDocente></CrearCuentaDocente>}
             />
           </Route>
         </Routes>

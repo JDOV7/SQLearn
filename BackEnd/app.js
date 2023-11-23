@@ -11,12 +11,10 @@ import SubTemaRouter from "./routes/SubTemaRouter.js";
 import TeoriaRouter from "./routes/TeoriaRouter.js";
 import JuegoRouter from "./routes/JuegoRouter.js";
 import AhorcadoRouter from "./routes/AhorcadoRouter.js";
+import partidaRouter from "./routes/PartidaRouter.js";
+import jugadorRouter from "./routes/JugadorRouter.js";
+import docenteRouter from "./routes/DocenteRouter.js";
 
-// import routerUsuario from "./Usuarios/index.js";
-// import routerAuth from "./Auth/AuthRouter.js";
-// import routerCajaFuertes from "./CajaFuertes/CajaFuertesRouter.js";
-// import routerObjectos from "./Objetos/ObjectosRouter.js";
-// import routerObjectosCompartidos from "./ObjectosCompartidos/ObjectosCompartidosRouter.js";
 import db from "./config/db.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,7 +42,7 @@ try {
 } catch (error) {
   console.log(error);
 }
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 const dominiosPermitidos = [process.env.FRONTEND_URL, "https://localhost:3001"];
 const corsOptions = {
@@ -66,8 +64,11 @@ app.use("/sub-temas", SubTemaRouter);
 app.use("/teoria", TeoriaRouter);
 app.use("/juego", JuegoRouter);
 app.use("/ahorcado", AhorcadoRouter);
+app.use("/partidas", partidaRouter);
+app.use("/jugadores", jugadorRouter);
+app.use("/docentes", docenteRouter);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor Corriendo en el puerto: ${PORT}`);
 });

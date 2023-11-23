@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import Swal from "sweetalert2";
 import Nav from "../Components/Nav";
 import OpcionesUsuario from "../Components/OpcionesUsuario";
+import mensajeError from "../Helpers/MensajeError";
 
 function TeoriaPage() {
   const navigate = useNavigate();
@@ -16,19 +17,53 @@ function TeoriaPage() {
 
   const [value, setValue] = useState("");
   const [NombreTeoria, setNombreTeoria] = useState(" ");
+  const [tipoUsuario, setTipoUsuario] = useState("");
+
+  useEffect(() => {
+    const iniciarSesion = async () => {
+      await verificarSesion();
+    };
+    iniciarSesion();
+  }, []);
+
+  const verificarSesion = async () => {
+    try {
+      const url = "jugadores/validar-sesion";
+      const token = window.localStorage.getItem("jwt_SQLearn_token");
+      const { data } = await clienteAxios.post(
+        url,
+        {},
+        { headers: { Authorization: token } }
+      );
+      console.log(data.data.tipo);
+      setTipoUsuario(data.data.tipo);
+    } catch (error) {
+      mensajeError("Inicia sesion", "Necesitas iniciar sesion primero");
+      navigate("/login");
+    }
+  };
 
   const crearNuevaTeoria = async (e) => {
     e.preventDefault();
     try {
+      const token = window.localStorage.getItem("jwt_SQLearn_token");
       const url = `/teoria/teoria`;
       console.log(IdSubTema);
       console.log(NombreTeoria);
       console.log(value);
-      const respuesta = await clienteAxios.post(url, {
-        IdSubTema,
-        NombreTeoria,
-        contenido: value,
-      });
+      const respuesta = await clienteAxios.post(
+        url,
+        {
+          IdSubTema,
+          NombreTeoria,
+          contenido: value,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       console.log(respuesta?.data?.data?.teoria);
       Swal.fire("Guardada Correctamente");
       navigate(`/app/subtema/${IdSubTema}`);
@@ -52,7 +87,9 @@ function TeoriaPage() {
   return (
     <>
       <Nav></Nav>
-      <OpcionesUsuario datos={{ opcionUsuario: 1 }}></OpcionesUsuario>
+      <OpcionesUsuario
+        datos={{ opcionUsuario: 1, tipoUsuario }}
+      ></OpcionesUsuario>
       <div className="py-4 px-52">
         <div className="flex justify-center items-center">
           <label htmlFor="titulo" className="text-2xl p-4">

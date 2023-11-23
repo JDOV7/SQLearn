@@ -11,6 +11,7 @@ const Ahorcado = db.define("Ahorcados", {
   titulo: { type: DataTypes.STRING },
   descripcion: { type: DataTypes.TEXT },
   palabras: { type: DataTypes.TEXT },
+  reglas: { type: DataTypes.TEXT },
 });
 
 export default Ahorcado;

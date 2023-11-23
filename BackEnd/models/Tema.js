@@ -9,6 +9,7 @@ const Tema = db.define("Temas", {
     defaultValue: DataTypes.UUIDV4,
   },
   NombreTema: { type: DataTypes.STRING },
+  Codigo: { type: DataTypes.STRING },
 });
 
 export default Tema;

@@ -5,9 +5,17 @@ import EstructuraDeUnaBDIMG from "../../public/img/organizado.png";
 import introduccionIMG from "../../public/img/bombilla.png";
 import teoriaIMG from "../../public/img/bombilla.png";
 import videojuegoIMG from "../../public/img/videojuego.png";
-function ElementoTemario({ datos, iTipoTema, iTipo, funcionalidad }) {
+function ElementoTemario({
+  datos,
+  iTipoTema,
+  iTipo,
+  funcionalidad,
+  funcionalidadEditar,
+  tipoUsuario,
+}) {
   const { titulo, url } = datos;
-  // console.log(esTema);
+  console.log(tipoUsuario);
+  // console.log(window.location.pathname);
   // const [click, setClick] = useState(false);
   let sColorFondo = "";
   let imagen = "";
@@ -32,6 +40,10 @@ function ElementoTemario({ datos, iTipoTema, iTipo, funcionalidad }) {
       sColorFondo = "bg-terciario";
       imagen = videojuegoIMG;
       break;
+    case 6:
+      sColorFondo = "bg-terciario";
+      imagen = videojuegoIMG;
+      break;
     default:
       break;
   }
@@ -47,7 +59,10 @@ function ElementoTemario({ datos, iTipoTema, iTipo, funcionalidad }) {
       sURL = `/app/teoria/contenido/${url}`;
       break;
     case 5:
-      sURL = `/app/teoria/contenido/${url}`;
+      sURL = `/app/juegos/ahorcado/ejecutando/${url}`;
+      break;
+    case 6:
+      sURL = `/app/juegos/ahorcado/docente/${url}`;
       break;
     default:
       break;
@@ -68,7 +83,25 @@ function ElementoTemario({ datos, iTipoTema, iTipo, funcionalidad }) {
               funcionalidad();
             }}
           >
-            <h2 className="shadow-2xl font-extrabold text-black">Eliminar</h2>
+            {tipoUsuario == "docente" ? (
+              <>
+                <h2 className="shadow-2xl font-extrabold text-black">
+                  Eliminar
+                </h2>
+              </>
+            ) : (
+              <>
+                {/* {window.location.pathname == "/app" ? (
+                  <>
+                    <h2 className="shadow-2xl font-extrabold text-black">
+                      Quitar
+                    </h2>
+                  </>
+                ) : (
+                  <></>
+                )} */}
+              </>
+            )}
           </div>
           <Link
             to={sURL}
@@ -76,8 +109,19 @@ function ElementoTemario({ datos, iTipoTema, iTipo, funcionalidad }) {
           >
             <img src={imagen} alt="" />
           </Link>
-          <div className="shadow-2xl rounded-full bg-green flex items-center justify-center hover:cursor-pointer">
-            <h2 className="font-extrabold text-black">Editar</h2>
+          <div
+            className="shadow-2xl rounded-full bg-green flex items-center justify-center hover:cursor-pointer"
+            onClick={() => {
+              funcionalidadEditar();
+            }}
+          >
+            {tipoUsuario == "docente" ? (
+              <>
+                <h2 className="font-extrabold text-black">Editar</h2>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
           <h2 className="pt-5 text-center text-xl font-bold">{titulo}</h2>
         </div>
